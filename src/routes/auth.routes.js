@@ -1,11 +1,9 @@
 import { Router } from "express";
-import morgan from "morgan";
-import authRoutes from "./routes/auth.routes.js";
+import { register, login } from '../controllers/auth.controllers.js';
 
 const router = Router();
 
-router.post('/register')
-router.post('/login')
-router.post('/logout')
+router.post('/register', register); 
+router.post('/login', login);   
 
 export default router;
