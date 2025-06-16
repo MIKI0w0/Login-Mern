@@ -57,9 +57,22 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
     res.clearCookie('token');
     res.status(200).json({ message: 'Sesión cerrada exitosamente' });
-}
-
+};
 
 export const profile = async (req, res) => {
-    res.send('profile');
+    try {
+        const userFound = await user.findById(req.user.id).select('-password'); 
+
+        if (!userFound) {
+            return res.status(404).json({ message: 'Usuario no encontrado en la base de datos.' });
+        }
+        return res.status(200).json({
+            id: userFound._id,
+            username: userFound.username,
+            email: userFound.email,
+        });
+    } catch (error) {
+        console.error('Error al obtener el perfil:', error);
+        return res.status(500).json({ message: 'Error interno del servidor al obtener el perfil.', error: error.message });
+    }
 };
